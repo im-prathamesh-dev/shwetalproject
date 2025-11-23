@@ -87,11 +87,7 @@ app.all('*', async (req, res) => {
 
 // listening to port
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, (err)=> {
-      if(err){
-            console.log('Error starting Error' +err);
-      }
-      else{
-      console.log(`Server is running on http://localhost:${PORT}`)
-      }
+app.listen(3000, '0.0.0.0', () => {
+  console.log("Server running on port 3000");
 });
+
