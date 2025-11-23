@@ -4,28 +4,38 @@
 FROM node:18-alpine
 
 # -------------------------------
+# Create non-root user
+# -------------------------------
+RUN addgroup -S nodegroup && adduser -S nodeuser -G nodegroup
+
+# -------------------------------
 # Set working directory
 # -------------------------------
 WORKDIR /app
 
 # -------------------------------
-# Copy package.json and package-lock.json
+# Copy package files & install dependencies
 # -------------------------------
 COPY package*.json ./
-
-# -------------------------------
-# Install dependencies
-# -------------------------------
 RUN npm install --production
 
 # -------------------------------
-# Copy all project files
+# Copy the rest of the project
 # -------------------------------
 COPY . .
 
 # -------------------------------
-# Expose port (your app likely runs on 3000 or 5000)
-# Change if needed
+# Change ownership to non-root user
+# -------------------------------
+RUN chown -R nodeuser:nodegroup /app
+
+# -------------------------------
+# Switch to non-root user
+# -------------------------------
+USER nodeuser
+
+# -------------------------------
+# Expose app port
 # -------------------------------
 EXPOSE 3000
 
